@@ -1,0 +1,6 @@
+spring:
+  config:
+    activate:
+      on-profile: uat
+message: Hello from UAT profile
+# VM options: -Dspring.profiles.active=uat
