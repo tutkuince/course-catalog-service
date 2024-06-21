@@ -1,6 +1,7 @@
 package com.ince.coursecatalogservice.controller
 
 import com.ince.coursecatalogservice.dto.CourseDTO
+import com.ince.coursecatalogservice.entity.Course
 import com.ince.coursecatalogservice.service.CourseService
 import com.ince.coursecatalogservice.util.courseDTO
 import com.ninjasquad.springmockk.MockkBean
@@ -63,5 +64,34 @@ class CourseControllerUnitTest {
             .responseBody
 
         assertEquals(2, courseDTOList!!.size, "Size should be same")
+    }
+
+    @Test
+    fun updateCourseTest() {
+        val savedCourse = Course(
+            null,
+            "Spring Security 6 Zero to Master",
+            "Security"
+        )
+
+        every { courseServiceMockk.updateCourse(any(), any()) } returns courseDTO(100, "Java Microservices: CQRS & Event Sourcing with Kafka")
+
+        val updatedCourseDTO = CourseDTO(
+            null,
+            "Java Microservices: CQRS & Event Sourcing with Kafka",
+            "Development"
+        )
+        val courseDto = webTestClient
+            .put()
+            .uri("/v1/courses/{id}", 100)
+            .bodyValue(updatedCourseDTO)
+            .exchange()
+            .expectStatus().isOk
+            .expectBody(CourseDTO::class.java)
+            .returnResult()
+            .responseBody
+
+        assertEquals(updatedCourseDTO.name, courseDto!!.name, "Name should be same")
+        assertEquals(updatedCourseDTO.category, courseDto.category, "Category should be same")
     }
 }
