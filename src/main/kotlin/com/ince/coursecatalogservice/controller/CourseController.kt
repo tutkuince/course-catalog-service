@@ -5,7 +5,10 @@ import com.ince.coursecatalogservice.service.CourseService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PatchMapping
+import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.ResponseStatus
@@ -18,10 +21,15 @@ class CourseController(val courseService: CourseService) {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     fun addCourse(@RequestBody courseDTO: CourseDTO): ResponseEntity<CourseDTO> {
-        return ResponseEntity.status(HttpStatus.CREATED).body(courseService.addCourse(courseDTO))
+        return ResponseEntity(courseService.addCourse(courseDTO), HttpStatus.CREATED)
     }
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    fun retrieveAllCourses(): ResponseEntity<List<CourseDTO>> = ResponseEntity.ok(courseService.retrieveAllCourses())
+    fun retrieveAllCourses(): ResponseEntity<List<CourseDTO>> = ResponseEntity(courseService.retrieveAllCourses(), HttpStatus.OK)
+
+    @PutMapping("/{id}")
+    fun updateCourse(@RequestBody courseDTO: CourseDTO, @PathVariable id: Int): ResponseEntity<CourseDTO> {
+        return ResponseEntity(courseService.updateCourse(id, courseDTO), HttpStatus.OK)
+    }
 }

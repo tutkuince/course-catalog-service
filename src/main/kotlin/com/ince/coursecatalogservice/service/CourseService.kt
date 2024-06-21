@@ -2,6 +2,7 @@ package com.ince.coursecatalogservice.service
 
 import com.ince.coursecatalogservice.dto.CourseDTO
 import com.ince.coursecatalogservice.entity.Course
+import com.ince.coursecatalogservice.exception.CourseNotFoundException
 import com.ince.coursecatalogservice.repository.CourseRepository
 import mu.KLogging
 import org.springframework.stereotype.Service
@@ -41,5 +42,24 @@ class CourseService(val courseRepository: CourseRepository) {
                     it.category
                 )
             }
+    }
+
+    fun updateCourse(id: Int, courseDTO: CourseDTO): CourseDTO {
+        val existingCourse = courseRepository.findById(id)
+        return if (existingCourse.isPresent) {
+            existingCourse.get()
+                .let {
+                    it.name = courseDTO.name ?: it.name
+                    it.category = courseDTO.category ?: it.category
+                    courseRepository.save(it)
+                    CourseDTO(
+                        it.id,
+                        it.name,
+                        it.category
+                    )
+                }
+        } else {
+            throw CourseNotFoundException("No course found for the passed in Id: $id")
+        }
     }
 }
