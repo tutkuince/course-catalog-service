@@ -13,6 +13,7 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.web.reactive.server.WebTestClient
 import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
@@ -46,7 +47,7 @@ class CourseControllerIntTest {
         assertEquals("Test Name", courseDTO.name, "Name should be same")
         assertEquals("Test Category", courseDTO.category, "Category Name should be same")
         // assertNotNull(result?.id, "Result cannot be null")
-        Assertions.assertTrue{ result!!.id != null }
+        Assertions.assertTrue { result!!.id != null }
     }
 
     @Test
@@ -90,5 +91,23 @@ class CourseControllerIntTest {
 
         assertEquals(updatedCourseDTO.name, courseDto!!.name, "Name should be same")
         assertEquals(updatedCourseDTO.category, courseDto.category, "Category should be same")
+    }
+
+    @Test
+    fun deleteCourseByIdTest() {
+        val savedCourse = Course(
+            null,
+            "Spring Security 6 Zero to Master",
+            "Security"
+        )
+        courseRepository.save(savedCourse)
+
+        val deleteCourseResult = webTestClient
+            .delete()
+            .uri("v1/courses/{id}", savedCourse.id)
+            .exchange()
+            .expectStatus().isNoContent
+
+        assertNotNull(savedCourse.id?.let { courseRepository.findById(it) }, "SavedCourse should be empty")
     }
 }
