@@ -4,6 +4,7 @@ import com.ince.coursecatalogservice.dto.CourseDTO
 import com.ince.coursecatalogservice.service.CourseService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
@@ -17,6 +18,6 @@ class CourseController(val courseService: CourseService) {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     fun addCourse(@RequestBody courseDTO: CourseDTO): ResponseEntity<CourseDTO> {
-        return ResponseEntity.ok(courseService.addCourse(courseDTO))
+        return ResponseEntity.status(HttpStatus.CREATED).body(courseService.addCourse(courseDTO))
     }
 }

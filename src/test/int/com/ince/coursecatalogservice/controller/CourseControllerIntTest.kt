@@ -8,9 +8,7 @@ import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWeb
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.web.reactive.server.WebTestClient
-import org.springframework.web.bind.annotation.ResponseBody
 import kotlin.test.assertEquals
-import kotlin.test.assertNotNull
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
@@ -27,7 +25,7 @@ class CourseControllerIntTest {
             .uri("/v1/courses")
             .bodyValue(courseDTO)
             .exchange()
-            .expectStatus().is2xxSuccessful
+            .expectStatus().isCreated
             .expectBody(CourseDTO::class.java)
             .returnResult()
             .responseBody
