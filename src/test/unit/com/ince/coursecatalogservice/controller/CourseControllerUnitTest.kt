@@ -6,6 +6,8 @@ import com.ince.coursecatalogservice.service.CourseService
 import com.ince.coursecatalogservice.util.courseDTO
 import com.ninjasquad.springmockk.MockkBean
 import io.mockk.every
+import io.mockk.just
+import io.mockk.runs
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -13,6 +15,7 @@ import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWeb
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.test.web.reactive.server.WebTestClient
 import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
 
 @WebMvcTest(controllers = [CourseController::class])
 @AutoConfigureWebTestClient
@@ -94,4 +97,15 @@ class CourseControllerUnitTest {
         assertEquals(updatedCourseDTO.name, courseDto!!.name, "Name should be same")
         assertEquals(updatedCourseDTO.category, courseDto.category, "Category should be same")
     }
+
+    /*@Test
+    fun deleteCourseByIdTest() {
+        every { courseServiceMockk.deleteCourseById(any()) } just runs  // simulate mock call no return value
+
+        val deleteCourseResult = webTestClient
+            .delete()
+            .uri("v1/courses/{id}", 1)
+            .exchange()
+            .expectStatus().isNoContent
+    }*/
 }
