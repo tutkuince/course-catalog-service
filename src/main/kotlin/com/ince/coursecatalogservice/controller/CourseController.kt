@@ -2,17 +2,20 @@ package com.ince.coursecatalogservice.controller
 
 import com.ince.coursecatalogservice.dto.CourseDTO
 import com.ince.coursecatalogservice.service.CourseService
+import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/v1/courses")
+@Validated
 class CourseController(val courseService: CourseService) {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    fun addCourse(@RequestBody courseDTO: CourseDTO): ResponseEntity<CourseDTO> {
+    fun addCourse(@RequestBody @Valid courseDTO: CourseDTO): ResponseEntity<CourseDTO> {
         return ResponseEntity(courseService.addCourse(courseDTO), HttpStatus.CREATED)
     }
 
