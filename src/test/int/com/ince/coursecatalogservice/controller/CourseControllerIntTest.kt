@@ -1,6 +1,7 @@
 package com.ince.coursecatalogservice.controller
 
 import com.ince.coursecatalogservice.dto.CourseDTO
+import com.ince.coursecatalogservice.entity.Course
 import com.ince.coursecatalogservice.repository.CourseRepository
 import com.ince.coursecatalogservice.util.courseEntityList
 import org.junit.jupiter.api.Assertions
@@ -61,5 +62,33 @@ class CourseControllerIntTest {
 
 
         assertEquals(3, courseDTOList!!.size, "Size should be same")
+    }
+
+    @Test
+    fun updateCourseTest() {
+        val savedCourse = Course(
+            null,
+            "Spring Security 6 Zero to Master",
+            "Security"
+        )
+        courseRepository.save(savedCourse)
+
+        val updatedCourseDTO = CourseDTO(
+            null,
+            "Java Microservices: CQRS & Event Sourcing with Kafka",
+            "Development"
+        )
+        val courseDto = webTestClient
+            .put()
+            .uri("/v1/courses/{id}", savedCourse.id)
+            .bodyValue(updatedCourseDTO)
+            .exchange()
+            .expectStatus().isOk
+            .expectBody(CourseDTO::class.java)
+            .returnResult()
+            .responseBody
+
+        assertEquals(updatedCourseDTO.name, courseDto!!.name, "Name should be same")
+        assertEquals(updatedCourseDTO.category, courseDto.category, "Category should be same")
     }
 }
