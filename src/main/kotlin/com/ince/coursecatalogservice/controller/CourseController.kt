@@ -20,4 +20,8 @@ class CourseController(val courseService: CourseService) {
     fun addCourse(@RequestBody courseDTO: CourseDTO): ResponseEntity<CourseDTO> {
         return ResponseEntity.status(HttpStatus.CREATED).body(courseService.addCourse(courseDTO))
     }
+
+    @GetMapping
+    @ResponseStatus(HttpStatus.OK)
+    fun retrieveAllCourses(): ResponseEntity<List<CourseDTO>> = ResponseEntity.ok(courseService.retrieveAllCourses())
 }
