@@ -1,5 +1,6 @@
 package com.ince.coursecatalogservice.util
 
+import com.ince.coursecatalogservice.dto.CourseDTO
 import com.ince.coursecatalogservice.entity.Course
 
 fun courseEntityList() = listOf(
@@ -18,4 +19,14 @@ fun courseEntityList() = listOf(
         "Build Reactive Microservices using Spring WebFlux/Spring Boot",
         "Development"
     )
+)
+
+fun courseDTO(
+    id: Int? = null,
+    name: String = "Build Restful APIs using Spring Boot and Kotlin",
+    category: String = "Development"
+) = CourseDTO(
+    id,
+    name,
+    category
 )
