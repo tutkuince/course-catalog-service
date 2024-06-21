@@ -42,4 +42,26 @@ class CourseControllerUnitTest {
         assertEquals("Test Category", courseDTO.category, "Category Name should be same")
         Assertions.assertTrue { result!!.id != null }
     }
+
+    @Test
+    fun retrieveAllCoursesTest() {
+
+        every { courseServiceMockk.retrieveAllCourses() }.returnsMany(
+            listOf(
+                courseDTO(1),
+                courseDTO(2, name = "Spring Security 6 Zero to Master")
+            )
+        )
+
+        val courseDTOList = webTestClient
+            .get()
+            .uri("/v1/courses")
+            .exchange()
+            .expectStatus().isOk
+            .expectBodyList(CourseDTO::class.java)
+            .returnResult()
+            .responseBody
+
+        assertEquals(2, courseDTOList!!.size, "Size should be same")
+    }
 }
