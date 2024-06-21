@@ -23,6 +23,11 @@ class CourseController(val courseService: CourseService) {
     @ResponseStatus(HttpStatus.OK)
     fun retrieveAllCourses(): ResponseEntity<List<CourseDTO>> = ResponseEntity(courseService.retrieveAllCourses(), HttpStatus.OK)
 
+    @GetMapping("/course")
+    @ResponseStatus(HttpStatus.OK)
+    fun retrieveAllCoursesByName(@RequestParam(required = false) name: String?): ResponseEntity<List<CourseDTO>> = ResponseEntity(
+        name?.let { courseService.retrieveAllCoursesByName(it) }, HttpStatus.OK)
+
     @PutMapping("/{id}")
     fun updateCourse(@RequestBody courseDTO: CourseDTO, @PathVariable id: Int): ResponseEntity<CourseDTO> {
         return ResponseEntity(courseService.updateCourse(id, courseDTO), HttpStatus.OK)

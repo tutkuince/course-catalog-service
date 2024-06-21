@@ -75,4 +75,15 @@ class CourseService(val courseRepository: CourseRepository) {
             throw CourseNotFoundException("No course found for the passed in Id: $id")
         }
     }
+
+    fun retrieveAllCoursesByName(name: String): List<CourseDTO> {
+        return courseRepository.findCourseByNameContaining(name)
+            .map {
+                CourseDTO(
+                    it.id,
+                    it.name,
+                    it.category
+                )
+            }
+    }
 }
