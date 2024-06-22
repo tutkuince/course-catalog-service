@@ -14,6 +14,6 @@ data class Instructor(
         cascade = [CascadeType.ALL],
         orphanRemoval = true
     )
-    var courses: List<Course>
+    var courses: List<Course> = mutableListOf()
 ) {
 }
