@@ -12,6 +12,6 @@ data class Course(
     var category: String,
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "instructor_id", nullable = false)
-    val instructor: Instructor
+    val instructor: Instructor? = null
 ) {
 }
