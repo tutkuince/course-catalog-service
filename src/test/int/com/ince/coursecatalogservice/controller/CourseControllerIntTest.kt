@@ -4,6 +4,7 @@ import com.ince.coursecatalogservice.dto.CourseDTO
 import com.ince.coursecatalogservice.entity.Course
 import com.ince.coursecatalogservice.repository.CourseRepository
 import com.ince.coursecatalogservice.repository.InstructorRepository
+import com.ince.coursecatalogservice.util.PostgresSQLContainerInitializer
 import com.ince.coursecatalogservice.util.courseEntityList
 import com.ince.coursecatalogservice.util.instructorEntity
 import org.junit.jupiter.api.Assertions
@@ -13,14 +14,9 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ActiveProfiles
-import org.springframework.test.context.DynamicPropertyRegistry
-import org.springframework.test.context.DynamicPropertySource
 import org.springframework.test.web.reactive.server.WebTestClient
 import org.springframework.web.util.UriComponentsBuilder
-import org.testcontainers.containers.PostgreSQLContainer
-import org.testcontainers.junit.jupiter.Container
 import org.testcontainers.junit.jupiter.Testcontainers
-import org.testcontainers.utility.DockerImageName
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 
@@ -28,7 +24,7 @@ import kotlin.test.assertNotNull
 @ActiveProfiles("test")
 @AutoConfigureWebTestClient
 @Testcontainers
-class CourseControllerIntTest {
+class CourseControllerIntTest: PostgresSQLContainerInitializer() {
 
     @Autowired
     lateinit var webTestClient: WebTestClient
@@ -38,7 +34,7 @@ class CourseControllerIntTest {
     @Autowired
     lateinit var instructorRepository: InstructorRepository
 
-    companion object {
+    /*companion object {
         @Container
         val postgresDB = PostgreSQLContainer<Nothing>(DockerImageName.parse("postgres:latest")).apply {
             withDatabaseName("testdb")
@@ -53,7 +49,7 @@ class CourseControllerIntTest {
             registry.add("spring.datasource.username", postgresDB::getUsername)
             registry.add("spring.datasource.password", postgresDB::getPassword)
         }
-    }
+    }*/
 
     @BeforeEach
     fun setUp() {
