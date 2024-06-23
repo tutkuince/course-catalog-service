@@ -11,13 +11,15 @@ class InstructorService(val instructorRepository: InstructorRepository) {
 
     @Transactional
     fun createInstructor(instructorDTO: InstructorDTO): InstructorDTO {
-        val instructor = Instructor(
-            null,
-            instructorDTO.name
-        )
-        instructorRepository.save(instructor)
+        val instructorEntity = instructorDTO.let {
+            Instructor(
+                it.id,
+                it.name
+            )
+        }
+        instructorRepository.save(instructorEntity)
 
-        return instructor.let {
+        return instructorEntity.let {
             InstructorDTO(
                 it.id,
                 it.name
