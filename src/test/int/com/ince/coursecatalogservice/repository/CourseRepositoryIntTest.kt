@@ -1,12 +1,15 @@
 package com.ince.coursecatalogservice.repository
 
+import com.ince.coursecatalogservice.util.PostgresSQLContainerInitializer
 import com.ince.coursecatalogservice.util.courseEntityList
+import com.ince.coursecatalogservice.util.instructorEntity
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
 import org.springframework.test.context.ActiveProfiles
 import java.util.stream.Stream
@@ -14,15 +17,21 @@ import kotlin.test.assertEquals
 
 @DataJpaTest
 @ActiveProfiles("test")
-class CourseRepositoryIntTest {
+@AutoConfigureTestDatabase(replace= AutoConfigureTestDatabase.Replace.NONE)
+class CourseRepositoryIntTest: PostgresSQLContainerInitializer() {
 
     @Autowired
     lateinit var courseRepository: CourseRepository
+    @Autowired
+    lateinit var instructorRepository: InstructorRepository
 
     @BeforeEach
     fun setUp() {
         courseRepository.deleteAll()
-        courseRepository.saveAll(courseEntityList())
+        instructorRepository.deleteAll()
+        val instructorEntity = instructorEntity()
+        instructorRepository.save(instructorEntity)
+        courseRepository.saveAll(courseEntityList(instructorEntity))
     }
 
     @Test
