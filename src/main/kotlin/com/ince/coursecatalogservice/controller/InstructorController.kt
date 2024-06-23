@@ -2,6 +2,7 @@ package com.ince.coursecatalogservice.controller
 
 import com.ince.coursecatalogservice.dto.InstructorDTO
 import com.ince.coursecatalogservice.service.InstructorService
+import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.validation.annotation.Validated
@@ -18,7 +19,7 @@ class InstructorController(val instructorService: InstructorService) {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    fun createInstructor(@RequestBody instructorDTO: InstructorDTO): ResponseEntity<InstructorDTO> {
+    fun createInstructor(@RequestBody @Valid instructorDTO: InstructorDTO): ResponseEntity<InstructorDTO> {
         return ResponseEntity(instructorService.createInstructor(instructorDTO), HttpStatus.CREATED)
     }
 }

@@ -44,4 +44,24 @@ class InstructorControllerUnitTest {
             result!!.id != null
         }
     }
+
+    @Test
+    fun createInstructor_validationTest() {
+        val instructorDTO: InstructorDTO = InstructorDTO(null, "")
+
+        every { instructorServiceMockk.createInstructor(any()) } returns instructorDTO(1)
+
+        val result = webTestClient
+            .post()
+            .uri("/v1/instructors")
+            .bodyValue(instructorDTO)
+            .exchange()
+            .expectStatus().isBadRequest
+            .expectBody(String::class.java)
+            .returnResult()
+            .responseBody
+
+        //then
+        assertEquals("Name must not be blank", result)
+    }
 }
