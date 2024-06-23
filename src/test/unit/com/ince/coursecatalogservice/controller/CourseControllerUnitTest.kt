@@ -6,8 +6,6 @@ import com.ince.coursecatalogservice.service.CourseService
 import com.ince.coursecatalogservice.util.courseDTO
 import com.ninjasquad.springmockk.MockkBean
 import io.mockk.every
-import io.mockk.just
-import io.mockk.runs
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -15,7 +13,6 @@ import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWeb
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.test.web.reactive.server.WebTestClient
 import kotlin.test.assertEquals
-import kotlin.test.assertNotNull
 
 @WebMvcTest(controllers = [CourseController::class])
 @AutoConfigureWebTestClient
@@ -29,7 +26,7 @@ class CourseControllerUnitTest {
 
     @Test
     fun addCourseTest() {
-        val courseDTO = CourseDTO(null, "Test Name", "Test Category")
+        val courseDTO = CourseDTO(null, "Test Name", "Test Category", 1)
 
         every { courseServiceMockk.addCourse(any()) } returns courseDTO(id = 1)
 
