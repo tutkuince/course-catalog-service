@@ -1,5 +1,6 @@
 package com.ince.coursecatalogservice.exception.handler
 
+import com.ince.coursecatalogservice.exception.InstructorNotFoundException
 import mu.KLogging
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
@@ -33,6 +34,12 @@ class GlobalErrorHandler: ResponseEntityExceptionHandler() {
         logger.info("errors: $errors")
 
         return ResponseEntity(errors.joinToString(", "), HttpStatus.BAD_REQUEST)
+    }
+
+    @ExceptionHandler(InstructorNotFoundException::class)
+    fun handleInstructorNotFoundException(ex: Exception, request: WebRequest): ResponseEntity<Any> {
+        logger.error("Exception observed: ${ex.message}", ex)
+        return ResponseEntity(ex.message, HttpStatus.NOT_FOUND)
     }
 
     @ExceptionHandler(Exception::class)

@@ -2,6 +2,7 @@ package com.ince.coursecatalogservice.service
 
 import com.ince.coursecatalogservice.dto.CourseDTO
 import com.ince.coursecatalogservice.entity.Course
+import com.ince.coursecatalogservice.entity.Instructor
 import com.ince.coursecatalogservice.exception.CourseNotFoundException
 import com.ince.coursecatalogservice.repository.CourseRepository
 import jakarta.transaction.Transactional
@@ -9,17 +10,25 @@ import mu.KLogging
 import org.springframework.stereotype.Service
 
 @Service
-class CourseService(val courseRepository: CourseRepository) {
+class CourseService(
+    val courseRepository: CourseRepository,
+    val instructorService: InstructorService
+) {
 
     companion object : KLogging()
 
     @Transactional
     fun addCourse(courseDTO: CourseDTO): CourseDTO {
+
+        val instructorDTO = instructorService.findInstructorById(courseDTO.instructorId!!)
+        val instructor = instructorDTO.let { Instructor(it.id, it.name) }
+
         val courseEntity = courseDTO.let {
             Course(
                 null,
                 it.name,
-                it.category
+                it.category,
+                instructor
             )
         }
         courseRepository.save(courseEntity)
@@ -30,7 +39,8 @@ class CourseService(val courseRepository: CourseRepository) {
             CourseDTO(
                 it.id,
                 it.name,
-                it.category
+                it.category,
+                it.instructor?.id
             )
         }
     }
