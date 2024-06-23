@@ -3,7 +3,9 @@ package com.ince.coursecatalogservice.controller
 import com.ince.coursecatalogservice.dto.CourseDTO
 import com.ince.coursecatalogservice.entity.Course
 import com.ince.coursecatalogservice.repository.CourseRepository
+import com.ince.coursecatalogservice.repository.InstructorRepository
 import com.ince.coursecatalogservice.util.courseEntityList
+import com.ince.coursecatalogservice.util.instructorEntity
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -26,16 +28,22 @@ class CourseControllerIntTest {
 
     @Autowired
     lateinit var courseRepository: CourseRepository
+    @Autowired
+    lateinit var instructorRepository: InstructorRepository
 
     @BeforeEach
     fun setUp() {
         courseRepository.deleteAll()
-        courseRepository.saveAll(courseEntityList())
+        instructorRepository.deleteAll()
+        val instructorEntity = instructorEntity()
+        instructorRepository.save(instructorEntity)
+        courseRepository.saveAll(courseEntityList(instructorEntity))
     }
 
     @Test
     fun addCourseTest() {
-        val courseDTO = CourseDTO(null, "Test Name", "Test Category")
+        val instructor = instructorRepository.findAll().first()
+        val courseDTO = CourseDTO(null, "Test Name", "Test Category", instructor.id)
         val result = webTestClient.post()
             .uri("/v1/courses")
             .bodyValue(courseDTO)
@@ -67,17 +75,20 @@ class CourseControllerIntTest {
 
     @Test
     fun updateCourseTest() {
+        val instructor = instructorRepository.findAll().first()
         val savedCourse = Course(
             null,
             "Spring Security 6 Zero to Master",
-            "Security"
+            "Security",
+            instructor
         )
         courseRepository.save(savedCourse)
 
         val updatedCourseDTO = CourseDTO(
             null,
             "Java Microservices: CQRS & Event Sourcing with Kafka",
-            "Development"
+            "Development",
+            instructor.id
         )
         val courseDto = webTestClient
             .put()
@@ -95,10 +106,12 @@ class CourseControllerIntTest {
 
     @Test
     fun deleteCourseByIdTest() {
+        val instructor = instructorRepository.findAll().first()
         val savedCourse = Course(
             null,
             "Spring Security 6 Zero to Master",
-            "Security"
+            "Security",
+            instructor
         )
         courseRepository.save(savedCourse)
 
