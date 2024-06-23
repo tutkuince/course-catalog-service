@@ -1,6 +1,7 @@
 package com.ince.coursecatalogservice.util
 
 import com.ince.coursecatalogservice.dto.CourseDTO
+import com.ince.coursecatalogservice.dto.InstructorDTO
 import com.ince.coursecatalogservice.entity.Course
 
 fun courseEntityList() = listOf(
@@ -29,4 +30,12 @@ fun courseDTO(
     id,
     name,
     category
+)
+
+fun instructorDTO(
+    id: Int? = null,
+    name: String = "Robert Cecil Martin",
+) = InstructorDTO(
+    id,
+    name
 )
